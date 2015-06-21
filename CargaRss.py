@@ -1,7 +1,7 @@
-
+import random
 import urllib.request
 import feedparser
-import random
+
 
 class Feed:
     id= 0
@@ -66,9 +66,10 @@ class Provider:
 
     # contructor
 
-    def __init__(self, id, url, maxFeeds):
+    def __init__(self,id, name,url,maxFeeds):
         self.id = id
         self.url = url
+        self.name = name
         self.maxFeeds = maxFeeds
         self.feedsList = []
 

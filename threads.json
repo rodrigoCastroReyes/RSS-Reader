@@ -1,0 +1,8 @@
+{
+	"time": 25 ,
+	"threads": [
+		{"id":"1","name":"El Universo","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"},
+		{"id":"2","name":"El Telegrafo","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"},
+		{"id":"3","name":"El Comercio","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"}
+	]
+}
