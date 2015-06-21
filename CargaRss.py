@@ -1,9 +1,7 @@
 
-
 import urllib.request
 import feedparser
-
-
+import random
 
 class Feed:
     id= 0
@@ -118,7 +116,11 @@ class Provider:
         except Exception as e:
             print("Tenemos Inconvenientes: " + str(e))
 
+    def getNews(self):
+        return self.getFeeds()[random.randrange(0,len(self.feedsList)-1)].getAlltoPrint()
+
     def printFeedsList(self):
+
         for i in range (1, len(self.feedsList)):
             print(self.getFeeds()[i-1].getAlltoPrint())
           #  print(self.getFeeds()[2].getTitle() + ' LINK >>' + p.getFeeds()[2].getLink())
@@ -126,15 +128,6 @@ class Provider:
           #  print(p.getFeeds()[4].getTitle() + ' LINK >>' + p.getFeeds()[4].getLink())
 
 
-###########################   PROGRAMA PRINCIPAL ###############################
-
-
-#p = Provider(0, 'http://www.eluniverso.com/rss/noticias.xml', 5)
-
-p = Provider(0, 'http://www.elcomercio.com/rss/tendencias', 5)
-p.cargaFeeds() # carga el número de noticias según maxFeeds de la clase Provider
-#print(p.getFeeds()[0].getTitle() + ' LINK >>' + p.getFeeds()[0].getLink())
-p.printFeedsList()
 
 
 
