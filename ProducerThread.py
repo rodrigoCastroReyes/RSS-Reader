@@ -4,6 +4,7 @@ from PyQt4 import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from CargaRss import *
+from heapq import *
 
 
 class PoolThreads():
@@ -54,6 +55,7 @@ class ProducerThread(QThread):
 		self.emit(SIGNAL("updateNews(QString)"),news)#genera un evento que sera manejado en la ventana para actualizarla
 
 	def __del__(self):
+		print("ha finalizado")
 		self.wait()
 
 	def showData(self):
@@ -79,7 +81,9 @@ class Window(QWidget):
        	layout.addWidget(self.textArea,1,0)
 
        	self.pool=PoolThreads("threads.json")
-       	self.thread=self.pool.threads[0]
+       	#self.thread=self.pool.threads[random.randrange(0,len(self.pool.threads)-1)]
+       	self.thread=self.pool.threads[7]
+
         self.connect(self.startButton, SIGNAL("clicked()"), self.runThread)
        	self.connect(self.thread,SIGNAL("updateNews(QString)"),self.updateData)
        	self.setLayout(layout)
@@ -90,16 +94,21 @@ class Window(QWidget):
     def updateData(self,news):
     	self.textArea.append(news)
 
+
 class PriorityQueue():
 
 	def __init__(self):
-		pass
+		self.data=[]
 
-	def enQueue(self):
-		pass
+	def enQueue(self,element):
+		heappush(self.data,element)
 
 	def deQueue(self):
-		pass
+		return heappop(self.data)
+
+	def isEmpty(self):
+		return not self.data 
+
 
 def main():
 	app = QApplication(sys.argv)

@@ -1,7 +1,7 @@
 import random
 import urllib.request
 import feedparser
-
+from datetime import datetime
 
 class Feed:
     id= 0
@@ -10,12 +10,13 @@ class Feed:
     fecha= ''
     descripcion= ''
 
-
     def __init__(self, id, tit, link, fecha, desc):
         self.id= id
         self.title= tit
         self.link = link
-        self.fecha = fecha
+        self.fecha=fecha
+        #f=fecha.split(', ')[1].split(' +')[0].split(' -')[0]
+        #self.fechaInfo= datetime.strptime(f, '%d %b %Y %H:%M:%S')#objeto datetime que almacena info de la fecha
         self.descripcion= desc
 
     def getId(self):
@@ -47,9 +48,19 @@ class Feed:
 
     def setAll(self, t, d, l, f):
         self.descripcion =  d
-        self.fecha = f
+        self.fecha = fecha
         self.title = t
         self.link = l
+
+    def __lt__(self, other):
+        pass
+
+    def __eq__(self, other):
+        pass
+
+    def infoFecha(self):
+        return str(self.fechaInfo.day)+"/"+str(self.fechaInfo.month)+"/"+str(self.fechaInfo.year)
+
 
     # Da formato a los elementos del feed y los deja listos para ser impresos
     def getAlltoPrint(self):

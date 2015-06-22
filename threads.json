@@ -1,8 +1,14 @@
 {
 	"time": 25 ,
 	"threads": [
-		{"id":"1","name":"El Universo","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"},
+		{"id":"1","name":"El Universo","url":"http://www.eluniverso.com/rss/deportes.xml","maxFeeds":"5"},
 		{"id":"2","name":"El Telegrafo","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"},
-		{"id":"3","name":"El Comercio","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"}
+		{"id":"3","name":"El Comercio","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"},
+		{"id":"4","name":"El Universo","url":"http://www.eluniverso.com/rss/noticias.xml","maxFeeds":"5"},
+		{"id":"5","name":"El Universo","url":"http://www.eluniverso.com/rss/vida-y-estilo.xml","maxFeeds":"5"},
+		{"id":"6","name":"El Universo","url":"http://www.eluniverso.com/rss/opinion.xml","maxFeeds":"5"},
+		{"id":"7","name":"BBC News","url":"http://feeds.bbci.co.uk/news/business/rss.xml","maxFeeds":"5"},
+		{"id":"8","name":"BBC News","url":"http://www.un.org/es/rss/es_rss_news.xml","maxFeeds":"10"}		
 	]
+	
 }
