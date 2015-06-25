@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'VentanaProveedor.ui'
 #
-# Created: Mon Jun 22 01:00:41 2015
+# Created: Wed Jun 24 22:20:00 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -24,15 +24,35 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class VentanaProveedor(QtGui.QWidget):
+class VentanaProveedor(QtGui.QDialog):
 
-    def __init__(self):
-        QtGui.QWidget.__init__(self)
+    def __init__(self, parent = None):
+        super(VentanaProveedor, self).__init__(parent)
         self.setupUi(self)
 
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(457, 288)
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(198, 190, 190))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(198, 190, 190))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        Form.setPalette(palette)
         self.scrollArea = QtGui.QScrollArea(Form)
         self.scrollArea.setGeometry(QtCore.QRect(30, 20, 401, 201))
         self.scrollArea.setWidgetResizable(True)
@@ -54,6 +74,6 @@ class VentanaProveedor(QtGui.QWidget):
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
-    ex = VentanaProveedor()
-    ex.show()
+    vp = VentanaProveedor()
+    vp.show()
     sys.exit(app.exec_())

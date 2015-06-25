@@ -9,10 +9,11 @@
 
 from PyQt4 import QtCore, QtGui
 from VentanaProveedor import VentanaProveedor
+from VentanaTools import VentanaTools
 import sys, os
 
 try:
-    fromUtf8 = QtCore.QString.fromUtf8
+    _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
 	def _fromUtf8(s):
 		return s
@@ -27,9 +28,10 @@ except AttributeError:
 
 class RssGUI(QtGui.QWidget):
 
-	def __init__(self):
-		QtGui.QWidget.__init__(self)
+	def __init__(self, parent = None):
+		super(RssGUI, self).__init__(parent)
 		self.setupUi(self)
+
 	def setupUi(self, Form):
 		Form.setObjectName(_fromUtf8("Form"))
 		Form.resize(555, 422)
@@ -101,26 +103,30 @@ class RssGUI(QtGui.QWidget):
 		self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
 		self.listNews = QtGui.QListView(self.scrollAreaWidgetContents)
 		self.listNews.setGeometry(QtCore.QRect(0, 0, 511, 311))
-		#self.listNews.setObjectName(_fromUtf8("listNews"http://www.espol.edu.ec/))
 		self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
-		self.connect(self.buttonAdd, QtCore.SIGNAL("clicked()"), self.openVentanaProveedor)
-		#self.buttonAdd.pressed.connect(self.openVentanaProveedor)
+		# conecciones
+		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
+		self.buttonConfig.pressed.connect(self.openVentanaTools)
 
+	@QtCore.pyqtSlot()
 	def openVentanaProveedor(self):
-		vP = VentanaProveedor()
-		self.close()
-		vP.show()
+		self.vP = VentanaProveedor(self)
+		self.vP.show()
+
+	@QtCore.pyqtSlot()
+	def openVentanaTools(self):
+		self.vT = VentanaTools(self)
+		self.vT.show()
 
 	def retranslateUi(self, Form):
 		Form.setWindowTitle(_translate("Form", "RSS Reader", None))
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
+	app.setApplicationName('RssGUI')
 	ex = RssGUI()
 	ex.show()
 	sys.exit(app.exec_())
-
-
