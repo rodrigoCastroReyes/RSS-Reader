@@ -52,15 +52,8 @@ class Feed:
         self.title = t
         self.link = l
 
-    def __lt__(self, other):
-        pass
-
-    def __eq__(self, other):
-        pass
-
     def infoFecha(self):
         return str(self.fechaInfo.day)+"/"+str(self.fechaInfo.month)+"/"+str(self.fechaInfo.year)
-
 
     # Da formato a los elementos del feed y los deja listos para ser impresos
     def getAlltoPrint(self):
@@ -138,11 +131,3 @@ class Provider:
           #  print(self.getFeeds()[2].getTitle() + ' LINK >>' + p.getFeeds()[2].getLink())
            # print(p.getFeeds()[3].getTitle() + ' LINK >>' + p.getFeeds()[3].getLink())
           #  print(p.getFeeds()[4].getTitle() + ' LINK >>' + p.getFeeds()[4].getLink())
-
-
-
-
-
-
-
-

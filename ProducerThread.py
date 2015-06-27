@@ -7,35 +7,6 @@ from CargaRss import *
 from queue import *
 
 
-class Window(QWidget):
-
-    def __init__(self, parent = None):
-        QWidget.__init__(self, parent)
-        self.setWindowTitle(self.tr("RSS Reader"))
-        self.showMaximized()
-        self.startButton = QPushButton(self.tr("&Start"))
-        layout = QGridLayout()
-        layout.addWidget(self.startButton, 0,0)
-
-        self.textArea = QTextEdit(parent)
-       	self.textArea.setReadOnly(True)
-       	self.textArea.setLineWrapMode(QTextEdit.NoWrap)
-       	layout.addWidget(self.textArea,1,0)
-
-       	self.pool=PoolThreads("threads.json")
-       	self.thread=self.pool.threads[random.randrange(0,len(self.pool.threads)-1)]
-
-        self.connect(self.startButton, SIGNAL("clicked()"), self.runThread)
-       	self.connect(self.thread,SIGNAL("updateNews(QString)"),self.updateData)
-       	self.setLayout(layout)
-
-    def runThread(self):
-    	self.thread.fetchData()
-
-    def updateData(self,news):
-    	self.textArea.append(news)
-
-
 class PoolThreads():
 
 	def __init__(self,filePath):
@@ -43,9 +14,10 @@ class PoolThreads():
 		self.buffer=Buffer()#inicializa el buffer que guardara las noticias: coleccion compartida
 		self.time=None#define el tiempo en el los hilos hacen la consulta
 		self.filePath=filePath#directorio del archivo que tiene informacion sobre los hilos
-		self.createThreads()#crea el pool de threads
-
-	def createThreads(self):#leeer el archivo ubicado en filePath y crea los hilos en base a esa informacion
+		self.mutex=QMutex()
+		self.create()#crea el pool de threads
+		
+	def create(self):#leeer el archivo ubicado en filePath y crea los hilos en base a esa informacion
 		with open(self.filePath, encoding='utf-8') as data_file:
 			data = json.loads(data_file.read())
 		time=int(data['time'])
@@ -55,19 +27,30 @@ class PoolThreads():
 			name=dataThreads["name"]
 			url=dataThreads["url"]
 			maxFeeds=int(dataThreads["maxFeeds"])
-			thread=ProducerThread(self.buffer)
+			thread=ProducerThread(self.mutex,self.buffer)
 			thread.setProvider(id,name,url,maxFeeds)
 			self.threads.append(thread)
+
+	def startToWork(self):
+		for thread in self.threads:
+			thread.fetchData()
+		print("Pool threads is working!")
+
+	def printBuffer(self):
+		self.buffer.printData()
+
 
 
 class ProducerThread(QThread):
 
-	def __init__(self,buffer,parent = None):
+	def __init__(self,mutex,buffer,parent = None):
 		QThread.__init__(self, parent)
 		self.provider=None
 		self.buffer=buffer
+		self.mutex=mutex
 
 	def setProvider(self,id,name,url,maxFeeds):
+		self.id=id
 		self.provider=Provider(id,name,url,maxFeeds)
 
 	def fetchData(self):
@@ -76,8 +59,12 @@ class ProducerThread(QThread):
 	def run(self):
 		#sincronizar el ingreso al buffer
 		self.provider.cargaFeeds()#descarga las noticias de internet y carga en memoria
-		news=self.provider.getNews()#obtiene el texto de una noticia
-		self.emit(SIGNAL("updateNews(QString)"),news)#genera un evento que sera manejado en la ventana para actualizarla
+		for feed in self.provider.getFeeds():
+			self.mutex.lock()#bloquea el mutex para guardar datos en el buffer
+			self.buffer.enQueue(feed)
+			self.mutex.unlock()#desbloquea el mutex para que otros hilos puedan usar el buffer
+		print("Thread "+ str(self.id) + "have ended");
+		#self.emit(SIGNAL("updateNews(QString)"),news)#genera un evento que sera manejado en la ventana para actualizarla
 
 	def __del__(self):
 		print("ha finalizado")
@@ -105,11 +92,8 @@ class Buffer():
 	def isEmpty(self):
 		return self.data.empty()
 
-def main():
-	app = QApplication(sys.argv)
-	window = Window()
-	window.show()
-	sys.exit(app.exec_())	
+	def printData(self):
+		while not(self.isEmpty()):
+			feed=self.deQueue()
+			print(feed.getAlltoPrint())
 
-if __name__ == '__main__':
-	main()
