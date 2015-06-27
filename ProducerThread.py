@@ -4,65 +4,7 @@ from PyQt4 import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from CargaRss import *
-from heapq import *
-
-
-class PoolThreads():
-
-	def __init__(self,filePath):
-		self.threads=[]
-		self.time=None
-		self.filePath=filePath
-		self.createThreads()
-		self.printThreadsInformation()
-
-	def createThreads(self):#leeer el archivo ubicado en filePath y crea los hilos en base a esa informacion
-		with open(self.filePath, encoding='utf-8') as data_file:
-			data = json.loads(data_file.read())
-		time=int(data['time'])
-		listThread=data['threads']
-		for dataThreads in listThread:
-			id=dataThreads["id"]
-			name=dataThreads["name"]
-			url=dataThreads["url"]
-			maxFeeds=int(dataThreads["maxFeeds"])
-			thread=ProducerThread()
-			thread.setProvider(id,name,url,maxFeeds)
-			self.threads.append(thread)
-
-	def printThreadsInformation(self):
-		for thread in self.threads:
-			thread.printInfo()
-
-
-
-class ProducerThread(QThread):
-
-	def __init__(self,buffer=None,parent = None):
-		QThread.__init__(self, parent)
-		self.provider=None
-
-	def setProvider(self,id,name,url,maxFeeds):
-		self.provider=Provider(id,name,url,maxFeeds)
-
-	def fetchData(self):
-		self.start()#llama al metodo run para traer los feeds desde el proveedor
-
-	def run(self):
-		print("aqui en el metodo run")
-		self.provider.cargaFeeds()#descarga las noticias de internet y carga en memoria
-		news=self.provider.getNews()#obtiene el texto de una noticia
-		self.emit(SIGNAL("updateNews(QString)"),news)#genera un evento que sera manejado en la ventana para actualizarla
-
-	def __del__(self):
-		print("ha finalizado")
-		self.wait()
-
-	def showData(self):
-		self.provider.printFeedsList()
-
-	def printInfo(self):
-		print("url:" +self.provider.getUrl())
+from queue import *
 
 
 class Window(QWidget):
@@ -81,8 +23,7 @@ class Window(QWidget):
        	layout.addWidget(self.textArea,1,0)
 
        	self.pool=PoolThreads("threads.json")
-       	#self.thread=self.pool.threads[random.randrange(0,len(self.pool.threads)-1)]
-       	self.thread=self.pool.threads[7]
+       	self.thread=self.pool.threads[random.randrange(0,len(self.pool.threads)-1)]
 
         self.connect(self.startButton, SIGNAL("clicked()"), self.runThread)
        	self.connect(self.thread,SIGNAL("updateNews(QString)"),self.updateData)
@@ -95,20 +36,74 @@ class Window(QWidget):
     	self.textArea.append(news)
 
 
-class PriorityQueue():
+class PoolThreads():
+
+	def __init__(self,filePath):
+		self.threads=[]
+		self.buffer=Buffer()#inicializa el buffer que guardara las noticias: coleccion compartida
+		self.time=None#define el tiempo en el los hilos hacen la consulta
+		self.filePath=filePath#directorio del archivo que tiene informacion sobre los hilos
+		self.createThreads()#crea el pool de threads
+
+	def createThreads(self):#leeer el archivo ubicado en filePath y crea los hilos en base a esa informacion
+		with open(self.filePath, encoding='utf-8') as data_file:
+			data = json.loads(data_file.read())
+		time=int(data['time'])
+		listThread=data['threads']
+		for dataThreads in listThread:
+			id=dataThreads["id"]
+			name=dataThreads["name"]
+			url=dataThreads["url"]
+			maxFeeds=int(dataThreads["maxFeeds"])
+			thread=ProducerThread(self.buffer)
+			thread.setProvider(id,name,url,maxFeeds)
+			self.threads.append(thread)
+
+
+class ProducerThread(QThread):
+
+	def __init__(self,buffer,parent = None):
+		QThread.__init__(self, parent)
+		self.provider=None
+		self.buffer=buffer
+
+	def setProvider(self,id,name,url,maxFeeds):
+		self.provider=Provider(id,name,url,maxFeeds)
+
+	def fetchData(self):
+		self.start()#llama al metodo run para traer los feeds desde el proveedor
+
+	def run(self):
+		#sincronizar el ingreso al buffer
+		self.provider.cargaFeeds()#descarga las noticias de internet y carga en memoria
+		news=self.provider.getNews()#obtiene el texto de una noticia
+		self.emit(SIGNAL("updateNews(QString)"),news)#genera un evento que sera manejado en la ventana para actualizarla
+
+	def __del__(self):
+		print("ha finalizado")
+		self.wait()
+
+	def showData(self):
+		self.provider.printFeedsList()
+
+	def printInfo(self):
+		print("url:" +self.provider.getUrl())
+
+
+class Buffer():
 
 	def __init__(self):
-		self.data=[]
-
+		self.data=Queue()
+		self.access=True
+		
 	def enQueue(self,element):
-		heappush(self.data,element)
+		self.data.put(element)
 
 	def deQueue(self):
-		return heappop(self.data)
+		return self.data.get()
 
 	def isEmpty(self):
-		return not self.data 
-
+		return self.data.empty()
 
 def main():
 	app = QApplication(sys.argv)
