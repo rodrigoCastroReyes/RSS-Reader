@@ -39,7 +39,6 @@ class Window(QWidget):
     	self.pool.startToWork()
 
     def showData(self):
-      print("Hola mundo")
       self.pool.printBuffer()
 
     def updateData(self,news):

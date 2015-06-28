@@ -70,10 +70,10 @@ class ProducerThread(QThread):
 			self.buffer.enQueue(feed)#ingresa un feed al buffer 
 			self.condition.wakeOne()#informa al consumerthread que hay datos que consumir
 			self.mutex.unlock()#desbloquea el mutex para que otros hilos puedan usar el buffer
-		print("Thread "+ str(self.id) + "have ended")
+		print("Thread "+ str(self.id) + " have done their work!")
 
 	def __del__(self):
-		print("Producer Thread have ended")
+		print("Producer Thread "+str(self.id) + " have ended!")
 		self.wait()
 
 	def showData(self):
@@ -83,26 +83,21 @@ class ConsumerThread(QThread):
 
 	def __init__(self,mutex,condition,buffer,parent = None):
 		QThread.__init__(self, parent)
-		self.provider=None
 		self.buffer=buffer
 		self.mutex=mutex
 		self.condition=condition
 
 	def run(self):
 		while True:
-			if not(self.buffer.isEmpty()):
-				self.mutex.lock()#accede al buffer para leer datos
+			self.mutex.lock()#accede al buffer para leer datos
+			if(self.buffer.isEmpty()):#si el buffer esta vacio se debe esperar hasta que hayan datos
 				self.condition.wait(self.mutex)#espera hasta que un producer thread informe que hay noticia nueva
-				self.mutex.unlock()
-
-				self.mutex.lock()#accede al buffer para leer datos
-				feed=self.buffer.deQueue()#saca un feed
-				print("Nuevo feed")
-				print(feed.getAlltoPrint())
-
-				self.mutex.unlock()
+			self.mutex.unlock()
+			self.mutex.lock()#accede al buffer para leer datos
+			while not(self.buffer.isEmpty()):#saca los feeds disponibles y los envia a la interfaz
+				feed=self.buffer.deQueue()
 				self.emit(SIGNAL("updateNews(QString)"),feed.getAlltoPrint())#genera un evento que sera manejado en la ventana para actualizarla
-				#permite que el resto de hilos use el buffer
+			self.mutex.unlock()#permite que el resto de hilos use el buffer
 
 	def readData(self):
 		self.start()
