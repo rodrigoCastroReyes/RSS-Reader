@@ -30,8 +30,10 @@ class Window(QWidget):
        	self.pool=PoolThreads("threads.json")
         self.connect(self.startButton, SIGNAL("clicked()"), self.runThread)
         self.connect(self.showDataButton,SIGNAL("clicked()"),self.showData)
-       	#self.connect(self.thread,SIGNAL("updateNews(QString)"),self.updateData)
-       	self.setLayout(layout)
+       	
+        self.connect(self.pool.getConsumerThread(),SIGNAL("updateNews(QString)"),self.updateData)
+       	
+        self.setLayout(layout)
 
     def runThread(self):
     	self.pool.startToWork()
