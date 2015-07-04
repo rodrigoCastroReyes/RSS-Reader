@@ -2,13 +2,12 @@
 
 # Form implementation generated from reading ui file 'VentanaTools.ui'
 #
-# Created: Wed Jun 24 22:48:43 2015
+# Created: Sat Jul  4 00:30:21 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-import sys
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -24,12 +23,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class VentanaTools(QtGui.QDialog):
-
-    def __init__(self, parent = None):
-        super(VentanaTools, self).__init__(parent)
-        self.setupUi(self)
-
+class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(400, 200)
@@ -67,12 +61,6 @@ class VentanaTools(QtGui.QDialog):
         self.horizontalSlider.setGeometry(QtCore.QRect(80, 50, 281, 16))
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName(_fromUtf8("horizontalSlider"))
-        self.horizontalSlider.setFocusPolicy(QtCore.Qt.StrongFocus)
-        self.horizontalSlider.setTickPosition(QtGui.QSlider.TicksBothSides)
-        self.horizontalSlider.setTickInterval(20)
-        self.horizontalSlider.setSingleStep(1)
-        self.horizontalSlider.setMaximum(180)
-        #self.horizontalSlider.setTickInterval(300)
         self.lcdNumber = QtGui.QLCDNumber(Form)
         self.lcdNumber.setGeometry(QtCore.QRect(160, 100, 101, 41))
         font = QtGui.QFont()
@@ -82,7 +70,6 @@ class VentanaTools(QtGui.QDialog):
         self.lcdNumber.setFont(font)
         self.lcdNumber.setFrameShape(QtGui.QFrame.Box)
         self.lcdNumber.setFrameShadow(QtGui.QFrame.Raised)
-        self.lcdNumber.setSegmentStyle(QtGui.QLCDNumber.Flat)
         self.lcdNumber.setObjectName(_fromUtf8("lcdNumber"))
         self.groupBox = QtGui.QGroupBox(Form)
         self.groupBox.setGeometry(QtCore.QRect(30, 90, 120, 80))
@@ -105,11 +92,4 @@ class VentanaTools(QtGui.QDialog):
         self.label.setText(_translate("Form", "Time", None))
         self.radioButton.setText(_translate("Form", "Minutes", None))
         self.radioButton_2.setText(_translate("Form", "Hours", None))
-        self.horizontalSlider.valueChanged.connect(self.lcdNumber.display)
-
-if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-    vt = VentanaTools()
-    vt.show()
-    sys.exit(app.exec_())
 
