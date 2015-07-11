@@ -2,15 +2,16 @@ import random
 import urllib.request
 import feedparser
 from datetime import datetime
+from PyQt4.QtCore import *
 
-class Feed:
+class Feed():
     id= 0
     title= ''
     link= ''
     fecha= ''
     descripcion= ''
 
-    def __init__(self, id, tit, link, fecha, desc):
+    def __init__(self, id, tit, link, fecha, desc,parent=None):
         self.id= id
         self.title= tit
         self.link = link

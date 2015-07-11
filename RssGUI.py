@@ -10,7 +10,11 @@
 from PyQt4 import QtCore, QtGui
 from VentanaProveedor import VentanaProveedor
 from VentanaTools import VentanaTools
+from CargaRss import *
+from queue import *
+from ProducerThread import *
 import sys, os
+import json
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -31,6 +35,7 @@ class RssGUI(QtGui.QWidget):
 	def __init__(self, parent = None):
 		super(RssGUI, self).__init__(parent)
 		self.setupUi(self)
+		
 
 	def setupUi(self, Form):
 		Form.setObjectName(_fromUtf8("Form"))
@@ -49,10 +54,12 @@ class RssGUI(QtGui.QWidget):
 		icon = QtGui.QIcon()
 		icon.addPixmap(QtGui.QPixmap(_fromUtf8("images/rss.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 		Form.setWindowIcon(icon)
+		
 		self.verticalLayout = QtGui.QVBoxLayout(Form)
 		self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
 		spacerItem = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		self.verticalLayout.addItem(spacerItem)
+		
 		self.horizontalLayout = QtGui.QHBoxLayout()
 		self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
 		spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -66,7 +73,7 @@ class RssGUI(QtGui.QWidget):
 		self.buttonHome.setText(_fromUtf8(""))
 		icon1 = QtGui.QIcon()
 		icon1.addPixmap(QtGui.QPixmap(_fromUtf8("images/home.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-		self.buttonHome.setIcon(icon1)
+		self.buttonHome.setIcon(icon1)#boton de home
 		self.buttonHome.setIconSize(QtCore.QSize(32, 32))
 		self.buttonHome.setObjectName(_fromUtf8("buttonHome"))
 		self.horizontalLayout.addWidget(self.buttonHome)
@@ -118,21 +125,56 @@ class RssGUI(QtGui.QWidget):
 		spacerItem5 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
 		self.horizontalLayout.addItem(spacerItem5)
 		self.verticalLayout.addLayout(self.horizontalLayout)
+
 		spacerItem6 = QtGui.QSpacerItem(20, 45, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		self.verticalLayout.addItem(spacerItem6)
-		self.textEdit = QtGui.QTextEdit(Form)
-		self.textEdit.setObjectName(_fromUtf8("textEdit"))
-		self.verticalLayout.addWidget(self.textEdit)
+		
+		self.scroll = QScrollArea()
+		self.verticalLayout.addWidget(self.scroll)
+		
+		self.feeds=QGroupBox()
+		self.feeds.setTitle("Noticias")
+
+		self.containerFeeds=QVBoxLayout()
+		self.feeds.setLayout(self.containerFeeds)
+
 		spacerItem7 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		self.verticalLayout.addItem(spacerItem7)
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
+		#hilos proveedores
+		self.pool=PoolThreads("threads.json")
+		self.runThread()
+		self.connect(self.pool.getConsumerThread(),SIGNAL("updateNews(PyQt_PyObject)"),self.updateData)
 		# conecciones
 		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
 		self.buttonConfig.pressed.connect(self.openVentanaTools)
-
+		self.feedsArrive=True
 		self.center()
+
+	def runThread(self):
+		self.pool.startToWork()
+
+	def updateData(self,feedNew):
+		containerFeedNew=QGridLayout()
+		title=QLabel(feedNew.getTitle())
+		description=QTextEdit(feedNew.getDescripcion())
+		description.setReadOnly(True)
+		containerFeedNew.addWidget(title,0,0)
+		containerFeedNew.addWidget(description,1,0)
+		self.containerFeeds.addLayout(containerFeedNew)
+
+		if self.feedsArrive:
+			self.feedsArrive=False
+			self.scrollOn()
+
+
+	def scrollOn(self):		
+		self.scroll.setWidget(self.feeds)
+		self.scroll.setWidgetResizable(True)
+		self.scroll.setFixedHeight(400)
+		
 
 	def center(self):
 		frameGm = self.frameGeometry()

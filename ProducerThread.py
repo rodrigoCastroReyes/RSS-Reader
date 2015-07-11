@@ -96,8 +96,10 @@ class ConsumerThread(QThread):
 			self.mutex.lock()#accede al buffer para leer datos
 			while not(self.buffer.isEmpty()):#saca los feeds disponibles y los envia a la interfaz
 				feed=self.buffer.deQueue()
-				self.emit(SIGNAL("updateNews(QString)"),feed.getAlltoPrint())#genera un evento que sera manejado en la ventana para actualizarla
+				self.emit(SIGNAL("updateNews(PyQt_PyObject)"),feed)#genera un evento que sera manejado en la ventana para actualizarla
+				#el evento almacena una referencia al feed que se acaba de extraer del buffer
 			self.mutex.unlock()#permite que el resto de hilos use el buffer
+			
 
 	def readData(self):
 		self.start()
