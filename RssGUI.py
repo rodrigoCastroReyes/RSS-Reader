@@ -31,10 +31,47 @@ except AttributeError:
 		return QtGui.QApplication.translate(context, text, disambig)
 
 class RssGUI(QtGui.QWidget):
+	StyleSheet = """
+	QGroupBox{
+		background-color: #0080FB;
+	}
+
+	QWidget[contenedor="true"]{
+		background-color: #e2e4e6;
+		border: 0px;
+	}
+
+	QLineEdit{ 
+		color: #0080FB; 
+		font-size: 22px;
+		font-weight:bold;
+		margin: 0px;
+		padding: 5px;
+		border: 0px;
+		background-color:#e2e4e6;
+	}
+
+	QLabel[noticias="true"]{
+		font-size: 30px;
+		padding: 1px;
+	}
+
+	QTextEdit { 
+		background-color:white;
+		border-radius: 8px; 
+		border: 1px solid white;
+		color: black;
+		font-size: 18px;
+		margin: 0px;
+		padding: 5px;
+	}
+	"""
 
 	def __init__(self, parent = None):
 		super(RssGUI, self).__init__(parent)
+		self.showMaximized()
 		self.setupUi(self)
+		self.setStyleSheet(RssGUI.StyleSheet)
 		
 
 	def setupUi(self, Form):
@@ -55,15 +92,17 @@ class RssGUI(QtGui.QWidget):
 		icon.addPixmap(QtGui.QPixmap(_fromUtf8("images/rss.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 		Form.setWindowIcon(icon)
 		
-		self.verticalLayout = QtGui.QVBoxLayout(Form)
+		self.verticalLayout = QtGui.QVBoxLayout(Form)#contenedor de todos los elementos de la GUI
+		self.verticalLayout.setContentsMargins(0,0,0,0)
 		self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-		spacerItem = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
-		self.verticalLayout.addItem(spacerItem)
-		
-		self.horizontalLayout = QtGui.QHBoxLayout()
+				
+		#Barra de Menu
+		self.horizontalLayout = QtGui.QHBoxLayout()# contenedor de la barra de opciones
 		self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-		spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-		self.horizontalLayout.addItem(spacerItem1)
+		self.horizontalLayout.addItem(
+			QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum))
+		
+		#Boton Noticias
 		self.buttonHome = QtGui.QPushButton(Form)
 		sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		sizePolicy.setHorizontalStretch(0)
@@ -74,11 +113,13 @@ class RssGUI(QtGui.QWidget):
 		icon1 = QtGui.QIcon()
 		icon1.addPixmap(QtGui.QPixmap(_fromUtf8("images/home.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 		self.buttonHome.setIcon(icon1)#boton de home
-		self.buttonHome.setIconSize(QtCore.QSize(32, 32))
+		self.buttonHome.setIconSize(QtCore.QSize(35, 35))
 		self.buttonHome.setObjectName(_fromUtf8("buttonHome"))
 		self.horizontalLayout.addWidget(self.buttonHome)
-		spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
-		self.horizontalLayout.addItem(spacerItem2)
+		self.horizontalLayout.addItem(
+			QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum))
+		
+		#Boton Agregar Proveedor
 		self.buttonAdd = QtGui.QPushButton(Form)
 		sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		sizePolicy.setHorizontalStretch(0)
@@ -92,8 +133,10 @@ class RssGUI(QtGui.QWidget):
 		self.buttonAdd.setIconSize(QtCore.QSize(32, 32))
 		self.buttonAdd.setObjectName(_fromUtf8("buttonAdd"))
 		self.horizontalLayout.addWidget(self.buttonAdd)
-		spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
-		self.horizontalLayout.addItem(spacerItem3)
+		self.horizontalLayout.addItem(
+			QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum))
+		
+		#Boton Quitar Proveedor
 		self.buttonDecrease = QtGui.QPushButton(Form)
 		sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		sizePolicy.setHorizontalStretch(0)
@@ -122,24 +165,28 @@ class RssGUI(QtGui.QWidget):
 		self.buttonConfig.setIconSize(QtCore.QSize(32, 32))
 		self.buttonConfig.setObjectName(_fromUtf8("buttonConfig"))
 		self.horizontalLayout.addWidget(self.buttonConfig)
-		spacerItem5 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-		self.horizontalLayout.addItem(spacerItem5)
-		self.verticalLayout.addLayout(self.horizontalLayout)
-
-		spacerItem6 = QtGui.QSpacerItem(20, 45, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
-		self.verticalLayout.addItem(spacerItem6)
+		self.horizontalLayout.addItem(
+			QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum))
 		
+		#Grupo de Widgets de la barra
+		self.barra=QtGui.QGroupBox()
+		self.barra.setLayout(self.horizontalLayout)
+		self.barra.setContentsMargins(0,0,0,0)
+		self.verticalLayout.addWidget(self.barra)#se agrega la barra a la GUI
+
 		self.scroll = QScrollArea()
 		self.verticalLayout.addWidget(self.scroll)
 		
-		self.feeds=QGroupBox()
-		self.feeds.setTitle("Noticias")
-
+		#self.feeds=QtGui.QGroupBox()
+		#self.feeds.setTitle("Noticias")
+		self.feeds=QtGui.QWidget()
+		self.feeds.setProperty("contenedor",True)
 		self.containerFeeds=QVBoxLayout()
+		
+		noticias=QLabel("Noticias")
+		noticias.setProperty("noticias", True)
+		self.containerFeeds.addWidget(noticias)
 		self.feeds.setLayout(self.containerFeeds)
-
-		spacerItem7 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
-		self.verticalLayout.addItem(spacerItem7)
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
@@ -150,7 +197,7 @@ class RssGUI(QtGui.QWidget):
 		# conecciones
 		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
 		self.buttonConfig.pressed.connect(self.openVentanaTools)
-		self.feedsArrive=True
+		self.feedsArrive=True#indica que llegaron feeds
 		self.center()
 
 	def runThread(self):
@@ -158,22 +205,27 @@ class RssGUI(QtGui.QWidget):
 
 	def updateData(self,feedNew):
 		containerFeedNew=QGridLayout()
-		title=QLabel(feedNew.getTitle())
+		#title=QLabel(feedNew.getTitle())
+		title=FeedTitle(feedNew.getTitle())
+		title.setUrl(feedNew.getLink())
+		self.connect(title,SIGNAL("clicked()"),self.showNew)
+
 		description=QTextEdit(feedNew.getDescripcion())
 		description.setReadOnly(True)
 		containerFeedNew.addWidget(title,0,0)
 		containerFeedNew.addWidget(description,1,0)
 		self.containerFeeds.addLayout(containerFeedNew)
-
 		if self.feedsArrive:
 			self.feedsArrive=False
 			self.scrollOn()
 
+	def showNew(self):
+		title=self.sender()
+		print(title.getUrl())
 
 	def scrollOn(self):		
 		self.scroll.setWidget(self.feeds)
 		self.scroll.setWidgetResizable(True)
-		self.scroll.setFixedHeight(400)
 		
 
 	def center(self):
@@ -195,6 +247,23 @@ class RssGUI(QtGui.QWidget):
 
 	def retranslateUi(self, Form):
 		Form.setWindowTitle(_translate("Form", "RSS Reader", None))
+
+class FeedTitle(QLineEdit):
+
+	def __init__(self, contents, parent = None):
+		QLineEdit.__init__(self,contents,parent)
+		self.setReadOnly(True)
+		self.url=""
+
+	def setUrl(self,url):
+		self.url=url
+
+	def getUrl(self):
+		return self.url
+
+	def mousePressEvent(self,event):
+		self.emit(SIGNAL("clicked()"))#send click signal
+
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
