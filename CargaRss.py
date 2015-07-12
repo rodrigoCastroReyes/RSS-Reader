@@ -53,6 +53,11 @@ class Feed():
         self.title = t
         self.link = l
 
+    def isEqual(self, feed):
+        if (feed.getLink()== self.getLink() and feed.getTitle()== self.getTitle() and feed.getDescripcion() == self.getDescripcion()):
+            return True
+        return False
+
     def infoFecha(self):
         return str(self.fechaInfo.day)+"/"+str(self.fechaInfo.month)+"/"+str(self.fechaInfo.year)
 
@@ -68,6 +73,7 @@ class Provider:
     url = ''
     maxFeeds=0 #cuantos feeds se trae el hilo por cada fetch al proveedor
     feedsList= []
+    oldFeeds= []
 
     # contructor
 
@@ -77,6 +83,7 @@ class Provider:
         self.name = name
         self.maxFeeds = maxFeeds
         self.feedsList = []
+        self.oldFeeds = []
 
     def getId(self):
         return self.id
@@ -89,6 +96,9 @@ class Provider:
 
     def getFeeds(self):
         return self.feedsList
+
+    def getOldFeeds(self):
+        return self.oldFeeds
 
     def setUrl(self, url):
         self.url = url
@@ -103,8 +113,18 @@ class Provider:
     def addFeed(self, Feed):
         self.feedsList.append(Feed)
 
+    def addOldFeed(self, Feed):
+        self.oldFeeds.append(Feed)
+
+
     def cleanFeedsList(self):
         self.feedsList = []
+
+    def feedIsOld(self, feed):
+        for i in range (1, len(self.oldFeeds)):
+            if (feed.isEqual(self.getOldFeeds()[i-1])):
+                return True
+        return False
 
     def cargaFeeds(self):
         i = self.maxFeeds
@@ -116,9 +136,15 @@ class Provider:
             d = feedparser.parse(x.read())
             while i > 0:
                 feed = Feed(c, d.entries[c].title, d.entries[c].link, d.entries[c].published, d.entries[c].description)
-                self.addFeed(feed)
-                i-=1
-                c+=1
+                if(self.feedIsOld(feed) == False):
+                    self.printOldFeedsList()
+                    print("Información nueva")
+                    self.addFeed(feed)
+                    i-=1
+                    c+=1
+                else:
+                    print("Hubo Información vieja")
+                    c+=1
         except Exception as e:
             print("Tenemos Inconvenientes: " + str(e))
 
@@ -129,6 +155,7 @@ class Provider:
 
         for i in range (1, len(self.feedsList)):
             print(self.getFeeds()[i-1].getAlltoPrint())
-          #  print(self.getFeeds()[2].getTitle() + ' LINK >>' + p.getFeeds()[2].getLink())
-           # print(p.getFeeds()[3].getTitle() + ' LINK >>' + p.getFeeds()[3].getLink())
-          #  print(p.getFeeds()[4].getTitle() + ' LINK >>' + p.getFeeds()[4].getLink())
+
+    def printOldFeedsList(self):
+        for i in range (1, len(self.oldFeeds)):
+            print(self.getOldFeeds()[i-1].getAlltoPrint())
