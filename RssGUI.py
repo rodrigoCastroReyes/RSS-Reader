@@ -180,6 +180,9 @@ class RssGUI(QtGui.QWidget):
 
 		self.scroll = QScrollArea()
 		self.verticalLayout.addWidget(self.scroll)
+
+		self.progress = QtGui.QProgressBar(self)
+		self.progress.setGeometry(200,80,250,20) 
 		
 		#self.feeds=QtGui.QGroupBox()
 		#self.feeds.setTitle("Noticias")
@@ -231,8 +234,10 @@ class RssGUI(QtGui.QWidget):
 
 	def updateData(self,feedNew):
 		containerFeedNew=QGridLayout()
+		#containerFeedNew.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
 		#title=QLabel(feedNew.getTitle())
 		title=FeedTitle(feedNew.getTitle())
+		title.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 		title.setUrl(feedNew.getLink())
 		self.connect(title,SIGNAL("clicked()"),self.showNew)
 
