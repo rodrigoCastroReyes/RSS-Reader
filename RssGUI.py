@@ -13,8 +13,11 @@ from VentanaTools import VentanaTools
 from CargaRss import *
 from queue import *
 from ProducerThread import *
+from Browser import *
+from Time import *
 import sys, os
 import json
+
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -118,7 +121,8 @@ class RssGUI(QtGui.QWidget):
 		self.horizontalLayout.addWidget(self.buttonHome)
 		self.horizontalLayout.addItem(
 			QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum))
-		
+		self.connect(self.buttonHome,SIGNAL("clicked()"),self.runThread)
+
 		#Boton Agregar Proveedor
 		self.buttonAdd = QtGui.QPushButton(Form)
 		sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
@@ -191,17 +195,39 @@ class RssGUI(QtGui.QWidget):
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
 		#hilos proveedores
-		self.pool=PoolThreads("threads.json")
-		self.runThread()
+		self.pool=PoolThreads("threads.json")#carga el pool de hilos
+		self.runThread()#manda a descargar informacion a los hilos productores
+		
 		self.connect(self.pool.getConsumerThread(),SIGNAL("updateNews(PyQt_PyObject)"),self.updateData)
+		#cuando el hilo consumidor extraiga datos del buffer se genera un evento que es manejado por la interfaz
+
 		# conecciones
 		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
 		self.buttonConfig.pressed.connect(self.openVentanaTools)
-		self.feedsArrive=True#indica que llegaron feeds
+		
+		self.flagScroll=True
+		
+		self.loadPage=[False]
+		self.browser=Browser(self.loadPage)
+
+		self.manageTime()
 		self.center()
 
 	def runThread(self):
 		self.pool.startToWork()
+
+	def manageTime(self):
+		t=Time()
+		self.clock=ClockThread(t.getCurrentTime(),self.pool.getTime())#obtiene el tiempo actual
+		#manda a ejecutar un hilo que consultara el tiempo
+		self.connect(self.clock,SIGNAL("timeOver()"),self.timeEnding)
+		self.clock.start()
+	
+	def timeEnding(self):
+		print("Time is Over")
+		#self.pool.startToWork()
+		#self.manageTime()
+
 
 	def updateData(self,feedNew):
 		containerFeedNew=QGridLayout()
@@ -215,13 +241,17 @@ class RssGUI(QtGui.QWidget):
 		containerFeedNew.addWidget(title,0,0)
 		containerFeedNew.addWidget(description,1,0)
 		self.containerFeeds.addLayout(containerFeedNew)
-		if self.feedsArrive:
-			self.feedsArrive=False
+		if self.flagScroll:
+			self.flagScroll=False
 			self.scrollOn()
 
 	def showNew(self):
-		title=self.sender()
-		print(title.getUrl())
+		if not(self.loadPage[0]):
+			title=self.sender()
+			self.loadPage[0]=True
+			url=title.getUrl()
+			if len(url)>0:
+				self.browser.openPage(url)
 
 	def scrollOn(self):		
 		self.scroll.setWidget(self.feeds)

@@ -12,7 +12,7 @@ class PoolThreads():
 	def __init__(self,filePath):
 		self.threads=[]
 		self.buffer=Buffer()#inicializa el buffer que guardara las noticias: coleccion compartida
-		self.time=None#define el tiempo en el los hilos hacen la consulta
+		self.time=None#define el tiempo en el que los hilos deben volver a hacer una consulta
 		self.filePath=filePath#directorio del archivo que tiene informacion sobre los hilos
 		self.mutex=QMutex()
 		self.condition=QWaitCondition()
@@ -21,7 +21,7 @@ class PoolThreads():
 	def create(self):#leeer el archivo ubicado en filePath y crea los hilos en base a esa informacion
 		with open(self.filePath, encoding='utf-8') as data_file:
 			data = json.loads(data_file.read())
-		time=int(data['time'])
+		self.time=int(data['time'])
 		listThread=data['threads']
 		for dataThreads in listThread:
 			id=dataThreads["id"]
@@ -38,6 +38,9 @@ class PoolThreads():
 		for thread in self.threads:
 			thread.fetchData()
 		print("Pool threads is working!")
+
+	def getTime(self):
+		return self.time
 
 	def getConsumerThread(self):
 		return self.consumerThread
@@ -99,7 +102,6 @@ class ConsumerThread(QThread):
 				self.emit(SIGNAL("updateNews(PyQt_PyObject)"),feed)#genera un evento que sera manejado en la ventana para actualizarla
 				#el evento almacena una referencia al feed que se acaba de extraer del buffer
 			self.mutex.unlock()#permite que el resto de hilos use el buffer
-			
 
 	def readData(self):
 		self.start()
