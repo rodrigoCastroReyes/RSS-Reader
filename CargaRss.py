@@ -54,7 +54,7 @@ class Feed():
         self.link = l
 
     def isEqual(self, feed):
-        if (feed.getLink()== self.getLink() and feed.getTitle()== self.getTitle() and feed.getDescripcion() == self.getDescripcion()):
+        if (feed.getTitle()== self.getTitle()):
             return True
         return False
 
@@ -116,13 +116,12 @@ class Provider:
     def addOldFeed(self, Feed):
         self.oldFeeds.append(Feed)
 
-
     def cleanFeedsList(self):
         self.feedsList = []
 
     def feedIsOld(self, feed):
-        for i in range (1, len(self.oldFeeds)):
-            if (feed.isEqual(self.getOldFeeds()[i-1])):
+        for i in range (0, len(self.oldFeeds)):
+            if (feed.isEqual(self.getOldFeeds()[i])):
                 return True
         return False
 
@@ -137,13 +136,11 @@ class Provider:
             while i > 0:
                 feed = Feed(c, d.entries[c].title, d.entries[c].link, d.entries[c].published, d.entries[c].description)
                 if(self.feedIsOld(feed) == False):
-                    self.printOldFeedsList()
-                    print("Información nueva")
+                    self.addOldFeed(feed)
                     self.addFeed(feed)
                     i-=1
                     c+=1
                 else:
-                    print("Hubo Información vieja")
                     c+=1
         except Exception as e:
             print("Tenemos Inconvenientes: " + str(e))
@@ -152,7 +149,6 @@ class Provider:
         return self.getFeeds()[random.randrange(0,len(self.feedsList)-1)].getAlltoPrint()
 
     def printFeedsList(self):
-
         for i in range (1, len(self.feedsList)):
             print(self.getFeeds()[i-1].getAlltoPrint())
 

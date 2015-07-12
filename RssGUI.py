@@ -200,7 +200,7 @@ class RssGUI(QtGui.QWidget):
 		#hilos proveedores
 		self.pool=PoolThreads("threads.json")#carga el pool de hilos
 		self.runThread()#manda a descargar informacion a los hilos productores
-		
+		self.clock=None
 		self.connect(self.pool.getConsumerThread(),SIGNAL("updateNews(PyQt_PyObject)"),self.updateData)
 		#cuando el hilo consumidor extraiga datos del buffer se genera un evento que es manejado por la interfaz
 
@@ -221,16 +221,19 @@ class RssGUI(QtGui.QWidget):
 
 	def manageTime(self):
 		t=Time()
-		self.clock=ClockThread(t.getCurrentTime(),self.pool.getTime())#obtiene el tiempo actual
+		if self.clock==None:
+			self.clock=ClockThread(t.getCurrentTime(),self.pool.getTime())#obtiene el tiempo actual
+			self.connect(self.clock,SIGNAL("timeOver()"),self.timeEnding)
+		else:
+			self.clock.setStartTime(t.getCurrentTime())
+
 		#manda a ejecutar un hilo que consultara el tiempo
-		self.connect(self.clock,SIGNAL("timeOver()"),self.timeEnding)
 		self.clock.start()
 	
 	def timeEnding(self):
 		print("Time is Over")
-		#self.pool.startToWork()
-		#self.manageTime()
-
+		self.pool.startToWork()
+		self.manageTime()
 
 	def updateData(self,feedNew):
 		containerFeedNew=QGridLayout()

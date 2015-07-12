@@ -1,22 +1,17 @@
 {
-	"time": 180 ,
+	"time": 120 ,
 	"threads": [
 		{"id":"1","name":"Science Daily Top News","url":"http://feeds.sciencedaily.com/sciencedaily/top_news","maxFeeds":"5"},
-		{"id":"2","name":"El Telegrafo","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"2"},
-		{"id":"3","name":"El Universo","url":"http://www.eluniverso.com/rss/noticias.xml","maxFeeds":"3"},
-		{"id":"4","name":"ACM Education","url":"http://cacm.acm.org/browse-by-subject/education.rss","maxFeeds":"8"},
-		{"id":"5","name":"ACM Computer Applications","url":"http://cacm.acm.org/browse-by-subject/computer-applications.rss","maxFeeds":"8"},
-		{"id":"6","name":"ACM Computer and Society","url":"http://cacm.acm.org/browse-by-subject/computers-and-society.rss","maxFeeds":"8"},
-		{"id":"7","name":"BBC News","url":"http://feeds.bbci.co.uk/news/business/rss.xml","maxFeeds":"5"},
-		{"id":"8","name":"BBC News","url":"http://www.un.org/es/rss/es_rss_news.xml","maxFeeds":"10"},	
-		{"id":"9","name":"Scholarly Open Access","url":"http://scholarlyoa.com/feed/","maxFeeds":"5"},	
-		{"id":"10","name":"CNN Top Stories","url":"http://rss.cnn.com/rss/edition.rss","maxFeeds":"5"},
-		{"id":"11","name":"CNN Technology","url":"http://rss.cnn.com/rss/edition_technology.rss","maxFeeds":"5"},
-		{"id":"12","name":"CNN Sports","url":"http://rss.cnn.com/rss/edition_sport.rss","maxFeeds":"5"},
-		{"id":"13","name":"Time Top Stories","url":"http://feeds2.feedburner.com/time/topstories","maxFeeds":"5"},
-		{"id":"14","name":"Time Business","url":"http://time.com/business/feed/","maxFeeds":"5"},
-		{"id":"15","name":"Time Techland","url":"http://time.com/tech/feed/","maxFeeds":"5"},
-		{"id":"16","name":"Science Daily Top News","url":"http://feeds.sciencedaily.com/sciencedaily/top_news","maxFeeds":"5"},
-		{"id":"17","name":"Science Daily Top Technology","url":"http://feeds.sciencedaily.com/sciencedaily/top_news/top_technology","maxFeeds":"5"}		
+		{"id":"2","name":"El Telegrafo","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"5"},
+		{"id":"3","name":"El Universo","url":"http://www.eluniverso.com/rss/noticias.xml","maxFeeds":"5"},
+		{"id":"4","name":"ACM Computer Applications","url":"http://cacm.acm.org/browse-by-subject/computer-applications.rss","maxFeeds":"8"},
+		{"id":"5","name":"BBC News","url":"http://feeds.bbci.co.uk/news/business/rss.xml","maxFeeds":"5"},
+		{"id":"6","name":"BBC News","url":"http://www.un.org/es/rss/es_rss_news.xml","maxFeeds":"10"},	
+		{"id":"7","name":"Scholarly Open Access","url":"http://scholarlyoa.com/feed/","maxFeeds":"5"},	
+		{"id":"8","name":"CNN Top Stories","url":"http://rss.cnn.com/rss/edition.rss","maxFeeds":"5"},
+		{"id":"9","name":"CNN Technology","url":"http://rss.cnn.com/rss/edition_technology.rss","maxFeeds":"10"},
+		{"id":"10","name":"El Universo","url":"http://www.eluniverso.com/rss/deportes.xml","maxFeeds":"5"},
+		{"id":"11","name":"Time Top Stories","url":"http://feeds2.feedburner.com/time/topstories","maxFeeds":"5"},
+		{"id":"12","name":"Science Daily Top News","url":"http://feeds.sciencedaily.com/sciencedaily/top_news","maxFeeds":"5"}
 	]
 }

@@ -30,6 +30,9 @@ class ClockThread(QThread):
 				self.emit(SIGNAL("timeOver()"))
 				break
 
+	def setStartTime(self,startTime):
+		self.startTime=startTime
+
 	def __del__(self):
 		print("Clock Thread have ended!")
 		self.wait()

@@ -63,7 +63,10 @@ class ProducerThread(QThread):
 		self.provider=Provider(id,name,url,maxFeeds)
 
 	def fetchData(self):
-		self.start()#llama al metodo run para traer los feeds desde el proveedor
+		if not(self.isRunning()):
+			self.start()#llama al metodo run para traer los feeds desde el proveedor
+		else:
+			print("Producer Thread "+str(self.id) + "already is running")
 
 	def run(self):
 		#sincronizar el ingreso al buffer
@@ -104,7 +107,10 @@ class ConsumerThread(QThread):
 			self.mutex.unlock()#permite que el resto de hilos use el buffer
 
 	def readData(self):
-		self.start()
+		if not(self.isRunning()):#si el productor no esta corriendo, se ejecuta
+			self.start()
+		else:
+			print("Thread Consumer already is running")
 
 	def __del__(self):
 		print("Consumer Thread have ended")
