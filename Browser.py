@@ -24,7 +24,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Browser(QtGui.QDialog):
+class Browser(QtGui.QWidget):
 
     def __init__(self, flag):
         super(Browser, self).__init__(None)
@@ -33,28 +33,30 @@ class Browser(QtGui.QDialog):
 
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(921, 626)
-        self.verticalLayoutWidget = QtGui.QWidget(Form)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 901, 601))
-        self.verticalLayoutWidget.setObjectName(_fromUtf8("verticalLayoutWidget"))
-        self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
+        Form.resize(990, 702)
+        self.verticalLayout_2 = QtGui.QVBoxLayout(Form)
+        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
+        self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.webView = QtWebKit.QWebView(self.verticalLayoutWidget)
+        spacerItem = QtGui.QSpacerItem(20, 10, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+        self.verticalLayout.addItem(spacerItem)
+        self.webView = QtWebKit.QWebView(Form)
         self.webView.setUrl(QtCore.QUrl(_fromUtf8("about:blank")))
         self.webView.setObjectName(_fromUtf8("webView"))
         self.verticalLayout.addWidget(self.webView)
-        self.progressBar = QtGui.QProgressBar(self.verticalLayoutWidget)
+        self.progressBar = QtGui.QProgressBar(Form)
         self.progressBar.setProperty("value", 0)
+        self.progressBar.setTextVisible(True)
         self.progressBar.setObjectName(_fromUtf8("progressBar"))
         self.verticalLayout.addWidget(self.progressBar)
+        spacerItem1 = QtGui.QSpacerItem(20, 10, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+        self.verticalLayout.addItem(spacerItem1)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+
 
         self.retranslateUi(Form)
-        self.webView.loadFinished.connect(self._result_available)
         QtCore.QObject.connect(self.webView, QtCore.SIGNAL(_fromUtf8("loadProgress(int)")), self.progressBar.setValue)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
-    def _result_available(self, ok):
-        frame = self.page().mainFrame()
 
     def openPage(self,url):
         self.webView.load(QtCore.QUrl(url))

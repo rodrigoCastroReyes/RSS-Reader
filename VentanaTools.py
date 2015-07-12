@@ -90,7 +90,7 @@ class VentanaTools(QtGui.QDialog):
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.horizontalSlider.valueChanged.connect(self.lcdNumber.display)
 
-    def getValue(self):
+    def getTime(self): # Funcion para obtener el tiempo seteado en segundos
     	return (self.horizontalSlider.value()*60)
     
     def retranslateUi(self, Form):
