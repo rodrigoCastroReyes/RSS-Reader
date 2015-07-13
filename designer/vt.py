@@ -2,13 +2,12 @@
 
 # Form implementation generated from reading ui file 'VentanaTools.ui'
 #
-# Created: Wed Jun 24 22:48:43 2015
+# Created: Sun Jul 12 20:15:14 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-import sys
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -24,12 +23,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class VentanaTools(QtGui.QDialog):
-
-    def __init__(self, parent = None):
-        super(VentanaTools, self).__init__(parent)
-        self.setupUi(self)
-
+class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(400, 200)
@@ -72,9 +66,8 @@ class VentanaTools(QtGui.QDialog):
         self.lcdNumber.setFont(font)
         self.lcdNumber.setFrameShape(QtGui.QFrame.Box)
         self.lcdNumber.setFrameShadow(QtGui.QFrame.Raised)
-        self.lcdNumber.setObjectName(_fromUtf8("lcdNumber"))
-        self.lcdNumber.setSegmentStyle(QtGui.QLCDNumber.Flat)
         self.lcdNumber.setProperty("intValue", 2)
+        self.lcdNumber.setObjectName(_fromUtf8("lcdNumber"))
         self.horizontalSlider = QtGui.QSlider(Form)
         self.horizontalSlider.setGeometry(QtCore.QRect(70, 30, 291, 16))
         self.horizontalSlider.setMinimum(2)
@@ -93,25 +86,13 @@ class VentanaTools(QtGui.QDialog):
         self.buttonAceptar.setObjectName(_fromUtf8("buttonAceptar"))
 
         self.retranslateUi(Form)
+        QtCore.QObject.connect(self.horizontalSlider, QtCore.SIGNAL(_fromUtf8("valueChanged(int)")), self.lcdNumber.display)
+        QtCore.QObject.connect(self.buttonAceptar, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.close)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.horizontalSlider.valueChanged.connect(self.lcdNumber.display)
-        self.buttonAceptar.pressed.connect(Form.close)
 
-    def getTime(self): # Funcion para obtener el tiempo seteado en segundos
-        return (self.horizontalSlider.value()*60)
-    
     def retranslateUi(self, Form):
         Form.setWindowTitle(_translate("Form", "Tools", None))
         self.label.setText(_translate("Form", "Time", None))
-        self.label.setText(_translate("Form", "Time", None))
         self.label_2.setText(_translate("Form", "Minutes:", None))
         self.buttonAceptar.setText(_translate("Form", "Aceptar", None))
-
-
-
-if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-    vt = VentanaTools()
-    vt.show()
-    sys.exit(app.exec_())
 

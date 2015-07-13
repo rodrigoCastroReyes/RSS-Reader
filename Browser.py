@@ -55,7 +55,8 @@ class Browser(QtGui.QWidget):
 
 
         self.retranslateUi(Form)
-        QtCore.QObject.connect(self.webView, QtCore.SIGNAL(_fromUtf8("loadProgress(int)")), self.progressBar.setValue)
+        #QtCore.QObject.connect(self.webView, QtCore.SIGNAL(_fromUtf8("loadProgress(int)")), self.progressBar.setValue)
+        self.webView.loadProgress.connect(self.progressBar.setValue)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def openPage(self,url):

@@ -204,6 +204,9 @@ class RssGUI(QtGui.QWidget):
 		self.connect(self.pool.getConsumerThread(),SIGNAL("updateNews(PyQt_PyObject)"),self.updateData)
 		#cuando el hilo consumidor extraiga datos del buffer se genera un evento que es manejado por la interfaz
 
+		self.vT = VentanaTools(self)
+		self.vP = VentanaProveedor(self)
+
 		# conecciones
 		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
 		self.buttonConfig.pressed.connect(self.openVentanaTools)
@@ -275,12 +278,10 @@ class RssGUI(QtGui.QWidget):
 
 	@QtCore.pyqtSlot()
 	def openVentanaProveedor(self):
-		self.vP = VentanaProveedor(self)
 		self.vP.show()
 
 	@QtCore.pyqtSlot()
 	def openVentanaTools(self):
-		self.vT = VentanaTools(self)
 		self.vT.show()
 
 	def retranslateUi(self, Form):
