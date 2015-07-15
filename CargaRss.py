@@ -124,6 +124,11 @@ class Provider:
     def cleanFeedsList(self):
         self.feedsList = []
 
+
+    def printAllProvider(self):
+         return self.id + ' - ' + self.name + ' - ' + self.url +  '\n\n'
+
+
     def feedIsOld(self, feed):
         for i in range (0, len(self.oldFeeds)):
             if (feed.isEqual(self.getOldFeeds()[i])):
