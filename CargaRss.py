@@ -4,6 +4,9 @@ import feedparser
 from datetime import datetime
 from PyQt4.QtCore import *
 
+#Es la clase màs bàsica que permite manipulas cada información como un Feed, incluye lasc aracterísticas
+#principales de una noticia rss como id,title,link,fecha
+
 class Feed():
     id= 0
     title= ''
@@ -67,7 +70,9 @@ class Feed():
 
 ########################################### CLASE PROVIDER #####################################################3
 
-# Clase de proveedores de feeds
+# Clase de proveedores de feeds permite agrupar todos los feeds de una url dada, la cantidad de feeds por URL
+# se encuentra configurado en el archivo threads.json
+
 class Provider:
     id=0
     url = ''
@@ -133,7 +138,7 @@ class Provider:
         try:
             x= urllib.request.urlopen(self.url)
             d = feedparser.parse(x.read())
-            while i > 0:
+            while i > 0 and c < len(d.entries):
                 feed = Feed(c, d.entries[c].title, d.entries[c].link, d.entries[c].published, d.entries[c].description)
                 if(self.feedIsOld(feed) == False):
                     self.addOldFeed(feed)
