@@ -7,7 +7,9 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+from PyQt4 import *
 from PyQt4 import QtCore, QtGui
+
 import sys
 
 try:
@@ -92,13 +94,16 @@ class VentanaTools(QtGui.QDialog):
         self.buttonAceptar.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.buttonAceptar.setObjectName(_fromUtf8("buttonAceptar"))
 
+        self.buttonAceptar.pressed.connect(self.getTime)
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         self.horizontalSlider.valueChanged.connect(self.lcdNumber.display)
         self.buttonAceptar.pressed.connect(Form.close)
 
     def getTime(self): # Funcion para obtener el tiempo seteado en segundos
-        return (self.horizontalSlider.value()*60)
+        time=self.horizontalSlider.value()*60
+        self.emit(QtCore.SIGNAL("getTime(PyQt_PyObject)"),time)#le pasa el tiempo a la interfaz
     
     def retranslateUi(self, Form):
         Form.setWindowTitle(_translate("Form", "Tools", None))
@@ -108,10 +113,8 @@ class VentanaTools(QtGui.QDialog):
         self.buttonAceptar.setText(_translate("Form", "Aceptar", None))
 
 
-
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     vt = VentanaTools()
     vt.show()
     sys.exit(app.exec_())
-

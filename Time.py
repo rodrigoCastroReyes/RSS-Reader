@@ -33,6 +33,9 @@ class ClockThread(QThread):
 	def setStartTime(self,startTime):
 		self.startTime=startTime
 
+	def setMaxTime(self,maxTime):
+		self.maxTime=maxTime
+
 	def __del__(self):
 		print("Clock Thread have ended!")
 		self.wait()

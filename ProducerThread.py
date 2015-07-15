@@ -42,6 +42,9 @@ class PoolThreads():
 	def getTime(self):
 		return self.time
 
+	def setTime(self,time):
+		self.time=time
+
 	def getConsumerThread(self):
 		return self.consumerThread
 
@@ -76,7 +79,7 @@ class ProducerThread(QThread):
 			self.buffer.enQueue(feed)#ingresa un feed al buffer 
 			self.condition.wakeOne()#informa al consumerthread que hay datos que consumir
 			self.mutex.unlock()#desbloquea el mutex para que otros hilos puedan usar el buffer
-		print("Thread "+ str(self.id) + " have done their work!")
+		print("Thread "+ str(self.id) + " have done your work!")
 
 	def __del__(self):
 		print("Producer Thread "+str(self.id) + " have ended!")
@@ -95,11 +98,13 @@ class ConsumerThread(QThread):
 
 	def run(self):
 		while True:
-			self.mutex.lock()#accede al buffer para leer datos
-			if(self.buffer.isEmpty()):#si el buffer esta vacio se debe esperar hasta que hayan datos
-				self.condition.wait(self.mutex)#espera hasta que un producer thread informe que hay noticia nueva
+			#consumidor duerme cuando el buffer esta vacio
+			self.mutex.lock()
+			while(self.buffer.isEmpty()):#si el buffer esta vacio se debe esperar hasta que hayan datos
+				self.condition.wait(self.mutex)#espera hasta que un producer thread informe que hay noticias nuevas
 			self.mutex.unlock()
 			self.mutex.lock()#accede al buffer para leer datos
+			#se extraen todos los feeds del buffer
 			while not(self.buffer.isEmpty()):#saca los feeds disponibles y los envia a la interfaz
 				feed=self.buffer.deQueue()
 				self.emit(SIGNAL("updateNews(PyQt_PyObject)"),feed)#genera un evento que sera manejado en la ventana para actualizarla

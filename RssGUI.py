@@ -211,37 +211,41 @@ class RssGUI(QtGui.QWidget):
 		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
 		self.buttonConfig.pressed.connect(self.openVentanaTools)
 		
-		self.flagScroll=True
-		
-		self.loadPage=[False]
-		self.browser=Browser(self.loadPage)
+		self.connect(self.vT,SIGNAL("getTime(PyQt_PyObject)"),self.changeTime)
 
+		self.flagScroll=True#habilitar scroll
+		self.loadPage=[False]#cargar pagina en browser
+		self.browser=Browser(self.loadPage)
 		self.manageTime()
 		self.center()
 
 	def runThread(self):
 		self.pool.startToWork()
+		
+	def changeTime(self,time):#configuracion para cambiar el tiempo del pool de hilos
+		self.pool.setTime(time)
+		print("El tiempo se ha cambiado")
 
 	def manageTime(self):
-		t=Time()
+		t=Time()#este objeto permite extraer el tiempo actual del sistema
 		if self.clock==None:
+			#se envia al hilo el tiempo actual y el maximo tiempo de espera
 			self.clock=ClockThread(t.getCurrentTime(),self.pool.getTime())#obtiene el tiempo actual
 			self.connect(self.clock,SIGNAL("timeOver()"),self.timeEnding)
 		else:
+			self.clock.setMaxTime(self.pool.getTime())
 			self.clock.setStartTime(t.getCurrentTime())
-
 		#manda a ejecutar un hilo que consultara el tiempo
 		self.clock.start()
 	
 	def timeEnding(self):
 		print("Time is Over")
 		self.pool.startToWork()
-		self.manageTime()
+		self.manageTime()#reinicia el reloj
 
 	def updateData(self,feedNew):
 		containerFeedNew=QGridLayout()
-		#containerFeedNew.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
-		#title=QLabel(feedNew.getTitle())
+		
 		title=FeedTitle(feedNew.getTitle())
 		title.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 		title.setUrl(feedNew.getLink())

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Proyecto RSS-Reader Sistemas Operativos 1er Parcial
 # Form implementation generated from reading ui file 'web.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
