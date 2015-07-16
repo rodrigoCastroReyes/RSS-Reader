@@ -96,6 +96,9 @@ class Provider:
     def getUrl(self):
         return self.url
 
+    def getName(self):
+        return self.name
+
     def getMaxFeeds(self):
         return self.maxFeeds
 

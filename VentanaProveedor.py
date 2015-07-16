@@ -29,6 +29,7 @@ except AttributeError:
 class VentanaProveedor(QtGui.QDialog):
 
     def __init__(self, parent = None):
+        self.listNewFeeds= []
         self.newsProviders= []
         super(VentanaProveedor, self).__init__(parent)
         self.setupUi(self)
@@ -81,11 +82,32 @@ class VentanaProveedor(QtGui.QDialog):
         self.retranslateUi(Form)
 
     def addButton_clicked(self):
-        self.listSelectedFeeds = []
+        self.listNewFeeds= []
         for i in range (1, len(self.checks)):
             if (self.checks[i-1].isChecked()):
-                print (self.checks[i-1].text()) #Imprime los checbox seleccionados (para verificar)
-                self.listNewFeeds.append(self.checks[i-1].text())
+                self.listNewFeeds.append(self.newsProviders[i-1])
+                self.newsProviders.remove(self.newsProviders[i-1])
+                print("Se ha añadido el proveedor: " + self.newsProviders[i-1].getName())
+        #self.refreshNewProvidersFile()
+
+
+    def refreshNewProvidersFile(self):
+        c=1
+        self.list=[]
+        outFile = open("newsProviders.json","w")
+        for i in range (1, len(self.newsProviders)):
+            dato = {"id":c,"name":self.newsProviders[i-1].getName(),"url":self.newsProviders[i-1].getUrl(),"maxFeeds":"5"},
+            json.dump(dato,outFile,indent=4)
+            #print(dato)
+            c+=1
+        outFile.close()
+
+
+    def deleteProvider(self):
+
+        for i in range (1, len(self.listNewFeeds)):
+            print(self.listNewFeeds[i-1].printAllProvider())
+
 
 
     def retranslateUi(self, Form):
