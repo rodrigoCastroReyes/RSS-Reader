@@ -10,6 +10,7 @@
 from PyQt4 import QtCore, QtGui
 from VentanaProveedor import VentanaProveedor
 from VentanaTools import VentanaTools
+from DeleteProveedor import DeleteProveedor
 from CargaRss import *
 from queue import *
 from ProducerThread import *
@@ -206,10 +207,12 @@ class RssGUI(QtGui.QWidget):
 
 		self.vT = VentanaTools(self)
 		self.vP = VentanaProveedor(self)
+		self.dP = DeleteProveedor(self)
 
 		# conecciones
 		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
 		self.buttonConfig.pressed.connect(self.openVentanaTools)
+		self.buttonDecrease.pressed.connect(self.openDeleteProveedor)
 		
 		self.connect(self.vT,SIGNAL("getTime(PyQt_PyObject)"),self.changeTime)
 
@@ -287,6 +290,9 @@ class RssGUI(QtGui.QWidget):
 	@QtCore.pyqtSlot()
 	def openVentanaTools(self):
 		self.vT.show()
+
+	def openDeleteProveedor(self):
+		self.dP.show()
 
 	def retranslateUi(self, Form):
 		Form.setWindowTitle(_translate("Form", "RSS Reader", None))

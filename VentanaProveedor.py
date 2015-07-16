@@ -33,7 +33,6 @@ class VentanaProveedor(QtGui.QDialog):
         super(VentanaProveedor, self).__init__(parent)
         self.setupUi(self)
 
-
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(716, 480)
@@ -81,13 +80,12 @@ class VentanaProveedor(QtGui.QDialog):
 
         self.retranslateUi(Form)
 
-        self.listNewFeeds = []
-
     def addButton_clicked(self):
+        self.listSelectedFeeds = []
         for i in range (1, len(self.checks)):
             if (self.checks[i-1].isChecked()):
                 print (self.checks[i-1].text()) #Imprime los checbox seleccionados (para verificar)
-                self.listNewFeeds.append(self.checks[i-10].text())
+                self.listNewFeeds.append(self.checks[i-1].text())
 
 
     def retranslateUi(self, Form):
@@ -104,27 +102,18 @@ class VentanaProveedor(QtGui.QDialog):
         for dataProv in providers:
             self.prov = Provider(dataProv["id"], dataProv["name"], dataProv["url"], int(dataProv["maxFeeds"]))
             self.newsProviders.append(self.prov)
-        self.printNewsProviders()
+        #self.printNewsProviders()
 
     def showNewsProviders(self, Form):
-        #newProviderBOX.setObjectName(_fromUtf8("horizontalLayout_3"))
         self.checks = []
         for i in range (1, len(self.newsProviders)):
             newProviderBOX = QtGui.QHBoxLayout()
             cB = QtGui.QCheckBox(self.newsProviders[i-1].printAllProvider())
-            #cB.setText(_translate("Form", "%s",self.newsProviders[i-1].printAllProvider())) 
             self.checks.append(cB)
             newProviderBOX.addWidget(cB)
             self.verticalLayout_2.addLayout(newProviderBOX)
-            #print(self.newsProviders[i-1].printAllProvider())
 
     def printNewsProviders(self):
         for i in range (1, len(self.newsProviders)):
             print(self.newsProviders[i-1].printAllProvider())
 
-
-if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-    vp = VentanaProveedor()
-    vp.show()
-    sys.exit(app.exec_())
