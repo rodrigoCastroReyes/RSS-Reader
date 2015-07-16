@@ -28,10 +28,17 @@ class PoolThreads():
 			name=dataThreads["name"]
 			url=dataThreads["url"]
 			maxFeeds=int(dataThreads["maxFeeds"])
+			
 			thread=ProducerThread(self.mutex,self.condition,self.buffer)
 			thread.setProvider(id,name,url,maxFeeds)
 			self.threads.append(thread)
+
 		self.consumerThread=ConsumerThread(self.mutex,self.condition,self.buffer)
+
+	def appendThread(self,provider):
+		thr=ProducerThread(self.mutex,self.condition,self.buffer)
+		thr.setProvider(provider.getId(),provider.getUrl(),provider.getName(),5)
+		self.threads.append(thr)		
 
 	def startToWork(self):
 		self.consumerThread.readData()
@@ -74,6 +81,7 @@ class ProducerThread(QThread):
 	def run(self):
 		#sincronizar el ingreso al buffer
 		self.provider.cargaFeeds()#descarga las noticias de internet y carga en memoria
+		
 		for feed in self.provider.getFeeds():
 			self.mutex.lock()#bloquea el mutex para guardar datos en el buffer
 			self.buffer.enQueue(feed)#ingresa un feed al buffer 

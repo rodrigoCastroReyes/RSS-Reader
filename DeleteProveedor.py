@@ -101,7 +101,7 @@ class DeleteProveedor(QtGui.QDialog):
     def loadNewProviders(self):#leeer el archivo ubicado en filePath y crea los hilos en base a esa informacion
         with open("newsProviders.json", encoding='utf-8') as data_file:
             data = json.loads(data_file.read())
-        self.time=int(data['time'])
+
         providers=data['threads']
         for dataProv in providers:
             self.prov = Provider(dataProv["id"], dataProv["name"], dataProv["url"], int(dataProv["maxFeeds"]))

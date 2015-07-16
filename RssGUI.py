@@ -142,6 +142,7 @@ class RssGUI(QtGui.QWidget):
 			QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum))
 		
 		#Boton Quitar Proveedor
+		"""
 		self.buttonDecrease = QtGui.QPushButton(Form)
 		sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		sizePolicy.setHorizontalStretch(0)
@@ -155,8 +156,10 @@ class RssGUI(QtGui.QWidget):
 		self.buttonDecrease.setIconSize(QtCore.QSize(32, 32))
 		self.buttonDecrease.setObjectName(_fromUtf8("buttonDecrease"))
 		self.horizontalLayout.addWidget(self.buttonDecrease)
+		
 		spacerItem4 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Minimum)
 		self.horizontalLayout.addItem(spacerItem4)
+		"""
 		self.buttonConfig = QtGui.QPushButton(Form)
 		sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
 		sizePolicy.setHorizontalStretch(0)
@@ -200,7 +203,6 @@ class RssGUI(QtGui.QWidget):
 		QtCore.QMetaObject.connectSlotsByName(Form)
 		#hilos proveedores
 		self.pool=PoolThreads("threads.json")#carga el pool de hilos
-		self.runThread()#manda a descargar informacion a los hilos productores
 		self.clock=None
 		self.connect(self.pool.getConsumerThread(),SIGNAL("updateNews(PyQt_PyObject)"),self.updateData)
 		#cuando el hilo consumidor extraiga datos del buffer se genera un evento que es manejado por la interfaz
@@ -212,7 +214,7 @@ class RssGUI(QtGui.QWidget):
 		# conecciones
 		self.buttonAdd.pressed.connect(self.openVentanaProveedor)
 		self.buttonConfig.pressed.connect(self.openVentanaTools)
-		self.buttonDecrease.pressed.connect(self.openDeleteProveedor)
+		#self.buttonDecrease.pressed.connect(self.openDeleteProveedor)
 		
 		self.connect(self.vT,SIGNAL("getTime(PyQt_PyObject)"),self.changeTime)
 
@@ -221,6 +223,7 @@ class RssGUI(QtGui.QWidget):
 		self.browser=Browser(self.loadPage)
 		self.manageTime()
 		self.center()
+		self.runThread()#manda a descargar informacion a los hilos productores
 
 	def runThread(self):
 		self.pool.startToWork()

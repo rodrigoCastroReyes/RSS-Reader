@@ -1,13 +1,1 @@
-{
-	"time": 180 ,
-	"threads": [
-		{"id":"1","name":"New","url":"http://rss.sciam.com/ScientificAmerican-News","maxFeeds":"5"},
-		{"id":"2","name":"Science Daily Top Society","url":"http://feeds.sciencedaily.com/sciencedaily/top_news/top_society","maxFeeds":"5"},
-		{"id":"3","name":"Science Daily Most Popular","url":"http://feeds.sciencedaily.com/sciencedaily/most_popular","maxFeeds":"5"},
-		{"id":"4","name":"El Universo","url":"http://www.eluniverso.com/rss/vida-y-estilo.xml","maxFeeds":"5"},
-		{"id":"5","name":"El Universo","url":"http://www.eluniverso.com/rss/opinion.xml","maxFeeds":"5"},
-		{"id":"6","name":"ACM Human Computer Interaction","url":"http://cacm.acm.org/browse-by-subject/human-computer-interaction.rss","maxFeeds":"5"},
-		{"id":"7","name":"ACM Computer Systems","url":"http://cacm.acm.org/browse-by-subject/computer-systems.rss","maxFeeds":"5"},
-		{"id":"8","name":"El Universo","url":"http://www.eluniverso.com/rss/deportes.xml","maxFeeds":"5"}
-	]
-}
+{"threads": [{"id": "1", "name": "New", "url": "http://rss.sciam.com/ScientificAmerican-News", "maxFeeds": "5"}, {"id": "2", "name": "Science Daily Top Society", "url": "http://feeds.sciencedaily.com/sciencedaily/top_news/top_society", "maxFeeds": "5"}, {"id": "3", "name": "Science Daily Most Popular", "url": "http://feeds.sciencedaily.com/sciencedaily/most_popular", "maxFeeds": "5"}, {"id": "4", "name": "El Universo", "url": "http://www.eluniverso.com/rss/vida-y-estilo.xml", "maxFeeds": "5"}]}

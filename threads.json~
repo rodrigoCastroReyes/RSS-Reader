@@ -1,15 +1,1 @@
-{
-	"time": 120 ,
-	"threads": [
-		{"id":"1","name":"El Telegrafo","url":"http://www.telegrafo.com.ec/index.php?option=com_zoo&task=feed&app_id=15&category_id=0&format=feed&type=rss&Itemid=163","maxFeeds":"5"},
-		{"id":"2","name":"El Universo","url":"http://www.eluniverso.com/rss/noticias.xml","maxFeeds":"5"},
-		{"id":"3","name":"El Comercio","url":"http://www.elcomercio.com/rss/tendencias","maxFeeds":"6"},
-		{"id":"4","name":"BBC News","url":"http://feeds.bbci.co.uk/news/business/rss.xml","maxFeeds":"8"},
-		{"id":"5","name":"ONU News","url":"http://www.un.org/es/rss/es_rss_news.xml","maxFeeds":"9"},	
-		{"id":"6","name":"Scholarly Open Access","url":"http://scholarlyoa.com/feed/","maxFeeds":"7"},	
-		{"id":"7","name":"ACM Computer Applications","url":"http://cacm.acm.org/browse-by-subject/computer-applications.rss","maxFeeds":"9"},
-		{"id":"8","name":"El Universo Deportes","url":"http://www.eluniverso.com/rss/deportes.xml","maxFeeds":"7"},
-		{"id":"9","name":"ACM Computer Systems","url":"http://cacm.acm.org/browse-by-subject/computer-systems.rss","maxFeeds":"5"},
-		{"id":"10","name":"ACM Computer Systems","url":"http://www.eluniverso.com/rss/tecnologia.xml","maxFeeds":"10"}
-	]
-}
+{"time": 120, "threads": [{"id": "1", "name": "El Telegrafo", "url": "http://www.telegrafo.com.ec/index.php?option=com_zoo&task=feed&app_id=15&category_id=0&format=feed&type=rss&Itemid=163", "maxFeeds": "5"}, {"id": "2", "name": "El Universo", "url": "http://www.eluniverso.com/rss/noticias.xml", "maxFeeds": "5"}, {"id": "3", "name": "El Comercio", "url": "http://www.elcomercio.com/rss/tendencias", "maxFeeds": "6"}, {"id": "4", "name": "BBC News", "url": "http://feeds.bbci.co.uk/news/business/rss.xml", "maxFeeds": "8"}, {"id": "5", "name": "ONU News", "url": "http://www.un.org/es/rss/es_rss_news.xml", "maxFeeds": "9"}, {"id": "6", "name": "Scholarly Open Access", "url": "http://scholarlyoa.com/feed/", "maxFeeds": "7"}, {"id": "7", "name": "Ecuavisa", "url": "http://www.ecuavisa.com/rss-ecuavisa", "maxFeeds": "9"}, {"id": "8", "name": "El Universo Deportes", "url": "http://www.eluniverso.com/rss/deportes.xml", "maxFeeds": "7"}, {"id": "9", "name": "Supercines", "url": "http://www.supercines.com/rss.ashx?g=1", "maxFeeds": "5"}, {"id": "10", "name": "ACM Computer Systems", "url": "http://www.eluniverso.com/rss/tecnologia.xml", "maxFeeds": "10"}, {"id": 11, "name": "El Universo", "url": "http://www.eluniverso.com/rss/opinion.xml", "maxFeeds": "5"}]}
