@@ -88,19 +88,51 @@ class VentanaProveedor(QtGui.QDialog):
                 self.listNewFeeds.append(self.newsProviders[i-1])
                 self.newsProviders.remove(self.newsProviders[i-1])
                 print("Se ha añadido el proveedor: " + self.newsProviders[i-1].getName())
-        #self.refreshNewProvidersFile()
+        self.refreshNewProvidersFile()
+        self.addNewProviderstoFile()
 
 
     def refreshNewProvidersFile(self):
         c=1
-        self.list=[]
-        outFile = open("newsProviders.json","w")
-        for i in range (1, len(self.newsProviders)):
-            dato = {"id":c,"name":self.newsProviders[i-1].getName(),"url":self.newsProviders[i-1].getUrl(),"maxFeeds":"5"},
-            json.dump(dato,outFile,indent=4)
-            #print(dato)
-            c+=1
-        outFile.close()
+        with open('newsProviders.json', encoding='utf-8') as data_file:
+            data = json.loads(data_file.read())
+
+        time=data['time']
+        threads=data['threads']
+        for i in range (1, len(self.listNewFeeds)):
+            data['threads'].remove({'id':self.listNewFeeds[i-1].getId(),'name':self.listNewFeeds[i-1].getName(),'url':self.listNewFeeds[i-1].getUrl(),'maxFeeds':'5'})#datos nuevos
+
+        for dataThreads in threads:
+            id=dataThreads["id"]
+            name=dataThreads["name"]
+            url=dataThreads["url"]
+            maxFeeds=dataThreads["maxFeeds"]
+        with open('newsProviders.json', 'w') as outfile:
+            json.dump(data, outfile)
+
+
+
+
+
+    def addNewProviderstoFile(self):
+        c=1
+        with open('threads.json', encoding='utf-8') as data_file:
+            data = json.loads(data_file.read())
+
+        time=data['time']
+        threads=data['threads']
+        for i in range (1, len(self.listNewFeeds)):
+            data['threads'].append({'id':c,'name':self.listNewFeeds[i-1].getName(),'url':self.listNewFeeds[i-1].getUrl(),'maxFeeds':'5'})#datos nuevos
+
+        for dataThreads in threads:
+            id=dataThreads["id"]
+            name=dataThreads["name"]
+            url=dataThreads["url"]
+            maxFeeds=dataThreads["maxFeeds"]
+            print("id: "+str(id)+ " name: " + name + " maxFeeds:" +maxFeeds)
+
+        with open('threads.json', 'w') as outfile:
+            json.dump(data, outfile)
 
 
     def deleteProvider(self):
